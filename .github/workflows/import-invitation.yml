@@ -1,0 +1,122 @@
+name: Import graduation invitation
+"on":
+  push:
+    branches: [main]
+    paths: [.github/workflows/import-invitation.yml]
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Import and verify the published invitation
+        run: |
+          python3 - <<'PYTHON'
+          from concurrent.futures import ThreadPoolExecutor
+          from hashlib import sha256
+          from pathlib import Path
+          from time import sleep
+          from urllib.request import Request, urlopen
+
+          source = 'https://ones-graduation-invitation.saisaingtunone2002.chatgpt.site/'
+          manifest = """
+          1fb0d7da21167acbcd13907366a617ca1dc8fae7f86f2d1fa609ff39fc18b979  assets/invitation-letter.webp
+          07f4c6393c3b58674ab9543a18bdb0f6a7137086c69f0f0b2916256913b89de8  assets/invitation-serif-italic.woff
+          42de4f0fa9a4acd4ce7b945a5ddec9e0a6f8e919daad6dcc3fa94caa565d8cab  assets/invitation-serif.woff
+          948497221ad5c47a45c1f1ce2739ebf67edf60bc75dd426a2f7c6477b66dfc5c  assets/monogram.png
+          075f91382875da1c4b491f1facf2586f55448705133264d98ce15cab6211b125  assets/noto-font-license.txt
+          01d4bcbe080d4e5e6148cbc473cd2129a93b73e63d6537f9ea7c0bb8991464d4  assets/paper-grain.png
+          25eaa9adcee812d94d9c9e0283dab183347aabbe88a9728dcc45f3fb82ff2e8a  assets/photos/afternoon-on-lawn-small.webp
+          e061c744a9862f52121b674da03e28d0f7991b65dbc4ff7a9b627e8d763c28a2  assets/photos/afternoon-on-lawn.webp
+          46f92e8871353682020c62ede42c8b64d8a4b9b4503f2f8fb95596b95b0387aa  assets/photos/afternoon-steps-small.webp
+          50280a236c1d98f835fdda3afeb880aa8c5bb9ea6affb846100029e1f1c3f4e2  assets/photos/afternoon-steps.webp
+          698e305a4bbc0bef6e422038c74799346fef94cca6e60af1a9b75250c5b74674  assets/photos/bridge-portrait-small.webp
+          ce7ca560e172abcb0313bdf3a5a481661888b317a74be48068e0c94f934a0aef  assets/photos/bridge-portrait.webp
+          af1e5a8d1f9d3d42139d705423e2bd269e565716a4704850c3ed3a0e909faf54  assets/photos/bridge-smile-small.webp
+          3003b21b0bc94ad033bfdb0cc754664a023e482eed0fcb819409a4524fb96d6d  assets/photos/bridge-smile.webp
+          03aaadec2b492b98c429c6c30114a1f2f7a06c4e3f74b208870faead2cdfad34  assets/photos/campus-lawn-small.webp
+          95d489ecad2f001b4d8bdda744b5daf80748a7eeb62ba64293f1a657533e56e2  assets/photos/campus-lawn.webp
+          18e704eed9c51b1227013393c62832b2e14c058e0a3de4294948e9d7a0f21fac  assets/photos/campus-portrait-small.webp
+          c5662ce8245b381c3903c198004e77c5c08b7971a1ed3f8ae6c782b4ed331912  assets/photos/campus-portrait.webp
+          6fce9ff6f4b40571b4ad64ca153060aee8f571773501f59c67741311aa6c421f  assets/photos/campus-statue-small.webp
+          4495ff471b819699afa7c0f8576c9e3f6e5b510f7c550afe46d34a84c2227f09  assets/photos/campus-statue.webp
+          31251995a65156cbc3c078d9e38b22ad9ed2a8accc0ceffba2e04f2e64b7713f  assets/photos/crossing-the-stairs-small.webp
+          bde652029744ffb4b75f8c8b6e220a5e6bbf5e10bc4403d7c5aeeed5d11cc2d7  assets/photos/crossing-the-stairs.webp
+          37369b148a1389aa75e27a23c8628a121a24387d95180970526bc55d8ce9a934  assets/photos/evening-portrait-small.webp
+          e117b52882a50a3f74b8d1d5c66aaf67138e4f87162e51e3bfcb7ef0343de8b4  assets/photos/evening-portrait.webp
+          98840e195e2f9a83721a15f404a547a2af52eeeeb073bfd81b22babfa0d622f4  assets/photos/golden-hour-small.webp
+          6d666b64d97f1ff9051553e48f3e857e8ff81b57f31b4292cd358e22c1990b01  assets/photos/golden-hour.webp
+          7e9aa2481d5e6817d840a1ce01747aab8a19b3c5fe7232d5cb01254706561ec4  assets/photos/gown-detail-small.webp
+          5a0c01e4eab6bb7e19846d016d956c04179950e2d803801f5e7db95b1b4c7bd5  assets/photos/gown-detail.webp
+          8c9c58b4496bb815ab5652e5dba4326f73cc5e6f9e948e7f20b059eed557aecc  assets/photos/on-the-grass-small.webp
+          11e042b0c767e70fccf95c1c9bb6300cc0aedecb721b3d0446ad1bf951a29ada  assets/photos/on-the-grass.webp
+          53d6aa788ba980b7d636d0472b15c9b7c5ef8f23bb848fcd3a470fb3236d3663  assets/photos/on-the-steps-small.webp
+          982822771c367fcaba68091437ac0f4dd257b51603a4d58855fd665d575b19bb  assets/photos/on-the-steps.webp
+          fd3c270c9001a0b54384a1a4cba50785ed3a2eb70f3b1f4c318bb4b0c8ff2230  assets/photos/outdoor-profile-small.webp
+          4b5f5db1d3bf51b898406ccdcdb674cec8255428277433830889d07ab3b1b1fe  assets/photos/outdoor-profile.webp
+          1a2305f5020dadb4e4630c3ab55c5a352d9ca09f1fde5ea7c617e9341cf4b349  assets/photos/quiet-profile-small.webp
+          9d692bea77e9d5982e1b0b9a9468917c1bdf6b39798f40219de9698df45ce535  assets/photos/quiet-profile.webp
+          c66b8129ab09d06d62025d3ec5e4a5b31e2d374ed6bd060d6722f3f3087f866e  assets/photos/seated-portrait-small.webp
+          191d9a69637a7049dd4e9b13665e8d5e2f043405224b7f16f174df34f73e25ac  assets/photos/seated-portrait.webp
+          72292608a167f101b4bf0fd55aee047dd2335ed0cd9dc655ad1c96ba539d8246  assets/photos/sitting-on-stairs-small.webp
+          f3571efee6e3ddb54d2e181dfac1ead12421d968e3506d7b21f1785dd0a9b6d5  assets/photos/sitting-on-stairs.webp
+          89b77a127a9c7d935cce619758f98a081df152f271d353668339e735f17d23d3  assets/photos/staircase-portrait-small.webp
+          34b155813dff36b25b83671e118ab43cde98badceb0344885741a1bcdc05df69  assets/photos/staircase-portrait.webp
+          53e080589e5c3818fabd15c461a91f60127202117ae6f100b4be65b76517d5b2  assets/photos/stairway-wide-small.webp
+          8e3e7361f4c964e448dfd502beb3209252b0cd31e9d9dbbaae969446ed2f1e49  assets/photos/stairway-wide.webp
+          3262d7132d23a52ca969e83611d0f71b99b613ba4d0bd7b9c3b91f3a25cd0459  assets/photos/studio-profile-small.webp
+          bfc41ac792ee8de9f0edddc7af4782443f438dabc4bfa1defde61afe0f8fc240  assets/photos/studio-profile.webp
+          1db4ed8e045e84cc3f28b5b28a9d876a36d9a0dfce9bbecca4127832511b760c  assets/photos/studio-smile-small.webp
+          d91074fa4e4accd60fc7efd8291ba57f93000850a590cd08bc4b12d08c190576  assets/photos/studio-smile.webp
+          c44059865ed57739b2b752a4d635f35f5538f3727f894c012bde832e0c99a3dd  assets/photos/sunlit-portrait-small.webp
+          1a114569ee7088faefc4eaec863a3b838eb1f0fe9c3b605d91d65f8d4b548bbd  assets/photos/sunlit-portrait.webp
+          21cac2981a400a073278defa00e2a8c498cd2b1772c944900e7c8892bcd2739a  assets/photos/under-the-trees-small.webp
+          8e2b4682634fc2b365d486ae2918449dc30b5caeb1f1f388e4c4b0216c5206c8  assets/photos/under-the-trees.webp
+          9934b47f0abf3c16574aa5fda99ee2ea9eaf5d19dffb095f51b4f44d0eab37b1  assets/qing-hua-ci.mp3
+          3fdb3058cd5bca6f1b05d14136e20185972616fcc8ed63a6abf96d84fadc4721  galaxy.js
+          9d19d89e3d90733c1c8f0af4fa19ed20bd71317fef4d50dcc95cb7619cc7f473  graduation-photos.js
+          59f911737c8460222ed616aa2cd0a17c1b792886621b9ecc6f8d0b480976bb93  index.html
+          cc0ea51591e8385df493772dcc29b421156e475fd07ba384ef4360ed6479d428  invitation.css
+          241f2b1b8a29cc21aa4d779c35710c0b50006009d6f6ce361d8ec42d51903865  invitation.js
+          088f5d7770c86539748c3c7726767ba429998b9981eac4f9428a84d2a1f5a591  motion.css
+          7b53a7fc07574f49c7a96d0e18fb5d24cc361342265c50424456238bd54876c9  paper-reveal.js
+          3e2e9e3d59ef61c3427eb5099fe3ff670064b12b804cc84ce02f270fcfe06a70  photo-motion.js
+          1b295da77179243f49b83deaa12259d538abff225bfbef4c8c184ad6ed3d7ad1  text-motion.js
+          bba5743ec7e81b0e83129d5f97ad03960547fe09e3bc30185f2a0d0a598b578c  webgl.js
+          """
+
+          def download(entry):
+              digest, filename = entry.split(maxsplit=1)
+              for delay in (0, 1, 3):
+                  if delay:
+                      sleep(delay)
+                  try:
+                      headers = {"Accept-Encoding": "identity", "Cache-Control": "no-cache"}
+                      with urlopen(Request(source + filename, headers=headers), timeout=35) as response:
+                          data = response.read()
+                      if sha256(data).hexdigest() != digest:
+                          raise ValueError("File differs from the verified invitation")
+                      return filename, data
+                  except (OSError, ValueError) as error:
+                      last_error = error
+              raise RuntimeError(f"Could not import {filename}: {last_error}")
+
+          if Path("index.html").exists():
+              raise SystemExit("The invitation is already in this repository")
+
+          with ThreadPoolExecutor(max_workers=8) as pool:
+              downloaded = list(pool.map(download, manifest.strip().splitlines()))
+          for filename, data in downloaded:
+              target = Path(filename)
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_bytes(data)
+          Path(".nojekyll").touch()
+          print(f"Imported and verified {len(downloaded)} invitation files.")
+          PYTHON
+          git add -- .nojekyll index.html *.js *.css assets/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Add graduation invitation site"
+          git push origin HEAD:main
