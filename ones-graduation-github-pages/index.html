@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a152c">
+  <meta name="description" content="Celebrate Sai Saing Tun One’s graduation from Rangsit University International College on December 5–6, 2026.">
+  <title>ONE’s Graduation Invitation</title>
+  <link rel="icon" href="./assets/monogram.png" type="image/png">
+  <link rel="preload" href="./assets/invitation-serif.woff" as="font" type="font/woff" crossorigin>
+  <link rel="preload" href="./assets/invitation-serif-italic.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="./invitation.css">
+  <link rel="stylesheet" href="./motion.css">
+  <script type="module" src="./invitation.js"></script>
+  <noscript><style>#cover, .replay, [data-music-button], #countdown, [href="#countdown"], #photos, [href="#photos"] { display: none !important; } #invitation[hidden] { display: block !important; }</style></noscript>
+</head>
+<body>
+  <canvas class="galaxy-field" id="galaxy-background" aria-hidden="true"></canvas>
+  <main>
+    <section class="cover" id="cover" aria-labelledby="cover-title">
+      <div class="cover-layout">
+        <div class="cover-content">
+          <header class="cover-heading">
+            <p class="eyebrow cover-eyebrow">ONE’s graduation · Dec 5–6, 2026</p>
+            <h1 id="cover-title" aria-label="You’re invited">
+              <span data-fold-text>You’re</span> <em data-fold-text>invited</em>
+            </h1>
+          </header>
+          <button class="open-invite" id="open-invite" type="button" aria-expanded="false" aria-controls="invitation" aria-labelledby="open-label">
+            <span class="envelope" aria-hidden="true">
+              <span class="envelope__back"></span>
+              <span class="envelope__letter">
+                <span class="envelope__letter-border">
+                  <span class="envelope__letter-mark">O</span>
+                  <span class="envelope__letter-title">ONE’s <em>Graduation</em></span>
+                  <span class="envelope__letter-date">December 5–6, 2026</span>
+                </span>
+              </span>
+              <span class="envelope__pocket">
+                <span class="envelope__fold envelope__fold--left"></span>
+                <span class="envelope__fold envelope__fold--right"></span>
+                <span class="envelope__fold envelope__fold--bottom"></span>
+              </span>
+              <span class="envelope__flap">
+                <span class="envelope__flap-face envelope__flap-face--front"></span>
+                <span class="envelope__flap-face envelope__flap-face--lining"></span>
+              </span>
+              <span class="seal"><span class="seal__monogram">O</span></span>
+            </span>
+            <span class="open-invite__label star-border" id="open-label">Open invitation <span class="arrow arrow--down" aria-hidden="true"></span></span>
+          </button>
+        </div>
+      </div>
+      <div class="cover-photos" aria-hidden="true">
+        <div id="photo-spiral" class="spiral-stage"></div>
+      </div>
+    </section>
+
+    <section class="invitation" id="invitation" aria-labelledby="invitation-title" hidden>
+      <header class="invitation-bar">
+        <div class="invitation-bar__inner page-width">
+          <p class="invitation-bar__title"><span class="monogram" aria-hidden="true">O</span> ONE’s graduation</p>
+          <nav class="invitation-nav" aria-label="Invitation sections">
+            <a href="#photos">Photos</a>
+            <a href="#countdown">Countdown</a>
+            <a href="#letter">Letter</a>
+            <a href="#schedule">Schedule</a>
+          </nav>
+          <div class="invitation-bar__actions">
+            <button class="utility-button music-toggle" data-music-button type="button" aria-label="Background music" aria-pressed="false">
+              <span aria-hidden="true">♫</span><span data-music-label data-off="Music off" data-loading="Loading…" data-playing="Music on" data-unavailable="Music unavailable" aria-hidden="true">Music off</span>
+            </button>
+            <button class="utility-button replay" id="replay" type="button" aria-label="Back to envelope"><span aria-hidden="true">↻</span> Envelope</button>
+          </div>
+        </div>
+        <p class="visually-hidden" id="music-status" role="status"></p>
+        <audio id="graduation-music" src="./assets/qing-hua-ci.mp3" preload="none" loop></audio>
+      </header>
+
+      <div class="invitation-hero page-width">
+        <div class="hero-copy">
+          <p class="eyebrow hero-date">December 5–6, 2026</p>
+          <h1 id="invitation-title" tabindex="-1">ONE’s <em>Graduation</em></h1>
+          <p class="hero-name">Sai Saing Tun One</p>
+          <p class="hero-intro">Come celebrate with me at Rangsit University International College.</p>
+          <a class="schedule-link star-border" href="#schedule">See the schedule <span class="arrow arrow--down" aria-hidden="true"></span></a>
+        </div>
+
+        <div class="collage">
+          <div class="collage__flap" aria-hidden="true"></div>
+          <figure class="collage__portrait">
+            <img src="./assets/photos/staircase-portrait.webp" alt="Sai Saing Tun One in a graduation gown on a staircase" width="960" height="1440" decoding="async">
+          </figure>
+          <p class="collage__name">ONE</p>
+          <button class="music-record" data-music-button type="button" aria-label="Background music" aria-pressed="false">
+            <span class="music-record__disc" aria-hidden="true"></span>
+            <span class="music-record__label" data-music-label data-off="Tap for music" data-loading="Loading…" data-playing="Pause music" data-unavailable="Unavailable" aria-hidden="true">Tap for music</span>
+            <span class="music-record__center" aria-hidden="true"><span class="playback-icon"></span></span>
+          </button>
+          <div class="collage__pocket" aria-hidden="true">
+            <span class="envelope__fold envelope__fold--left"></span>
+            <span class="envelope__fold envelope__fold--right"></span>
+            <span class="envelope__fold envelope__fold--bottom"></span>
+          </div>
+          <div class="seal collage__seal" aria-hidden="true"><span class="seal__monogram">O</span></div>
+        </div>
+      </div>
+
+      <section class="photos" id="photos" aria-labelledby="photos-title">
+        <div class="page-width">
+          <header class="section-heading">
+            <h2 id="photos-title" data-fold-text>Graduation photos</h2>
+          </header>
+          <div class="coverflow" id="coverflow" role="region" aria-roledescription="carousel" aria-label="Graduation photo collection">
+            <div class="coverflow__frame" tabindex="0" aria-label="Swipe or use the left and right arrow keys to browse">
+              <div class="coverflow__stage"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="countdown-scene">
+        <section class="countdown page-width" id="countdown" aria-labelledby="countdown-title">
+          <header class="countdown__header">
+            <h2 id="countdown-title" data-fold-text>The countdown</h2>
+            <div class="countdown__options" role="group" aria-label="Count down to">
+              <button type="button" data-target="2026-12-05T07:00:00+07:00" data-started="Rehearsal has started." aria-pressed="false">Rehearsal <span>Dec 5</span></button>
+              <button type="button" data-target="2026-12-06T11:30:00+07:00" data-started="The graduation ceremony has started." aria-pressed="true">Graduation <span>Dec 6</span></button>
+            </div>
+          </header>
+          <div class="countdown__body" id="countdown-clock" role="timer" aria-live="off">
+            <dl class="countdown__values">
+              <div><dt>Days</dt><dd data-unit="days">00</dd></div>
+              <div><dt>Hours</dt><dd data-unit="hours">00</dd></div>
+              <div><dt>Minutes</dt><dd data-unit="minutes">00</dd></div>
+              <div><dt>Seconds</dt><dd data-unit="seconds">00</dd></div>
+            </dl>
+            <p id="countdown-status" class="countdown__status" hidden></p>
+          </div>
+        </section>
+      </div>
+
+      <section class="invitation-letter page-width" id="letter" aria-labelledby="letter-title">
+        <header class="section-heading">
+          <h2 id="letter-title" data-fold-text>Invitation letter</h2>
+        </header>
+        <figure class="letter-stage" id="letter-stage">
+          <img class="letter-stage__image" src="./assets/invitation-letter.webp" width="1638" height="2048" alt="Graduation celebration invitation signed by ONE" loading="lazy" decoding="async">
+          <canvas class="letter-stage__canvas" aria-hidden="true"></canvas>
+          <span class="letter-stage__trigger" aria-hidden="true"></span>
+          <figcaption class="visually-hidden">
+            <p>You’re invited. Graduation Celebration.</p>
+            <p>The end of a chapter. The beginning of a new journey.</p>
+            <p>With great joy and gratitude, I warmly invite you to celebrate one of the most meaningful milestones in my life — my graduation.</p>
+            <p>Your presence would make this special occasion even more memorable. I look forward to celebrating this achievement and creating beautiful memories together.</p>
+            <p>With love and gratitude, ONE.</p>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="schedule page-width" id="schedule" aria-labelledby="schedule-title">
+        <header class="section-heading">
+          <h2 id="schedule-title" data-fold-text>The weekend</h2>
+          <p>All times are in Thailand time (ICT).</p>
+        </header>
+        <div class="schedule__days">
+          <article class="schedule-day">
+            <h3><time datetime="2026-12-05">Saturday, Dec 5</time></h3>
+            <ul class="schedule-day__events">
+              <li class="schedule-event">
+                <div>
+                  <h4>Rehearsal</h4>
+                  <p>Room 200, 2nd floor, Building 9 (A)</p>
+                </div>
+                <p class="schedule-event__time"><time datetime="2026-12-05T07:00:00+07:00">7:00 AM</time>–<time datetime="2026-12-05T12:00:00+07:00">12:00 PM</time></p>
+              </li>
+              <li class="schedule-event">
+                <div>
+                  <h4>Group photo</h4>
+                  <p>Stand L (Large)</p>
+                </div>
+                <p class="schedule-event__time"><time datetime="2026-12-05T11:45:00+07:00">11:45 AM</time>–<time datetime="2026-12-05T12:00:00+07:00">12:00 PM</time></p>
+              </li>
+            </ul>
+          </article>
+          <article class="schedule-day">
+            <h3><time datetime="2026-12-06">Sunday, Dec 6</time></h3>
+            <ul class="schedule-day__events">
+              <li class="schedule-event">
+                <div>
+                  <h4>Commencement ceremony</h4>
+                  <p>4th and 5th floors, Building 3</p>
+                </div>
+                <p class="schedule-event__time"><time datetime="2026-12-06T11:30:00+07:00">11:30 AM</time></p>
+              </li>
+            </ul>
+          </article>
+        </div>
+        <p class="contact-note" id="contact">Can’t find me? Call <a href="tel:+66909582130">0909582130</a>.</p>
+        <p class="music-credit"><span lang="zh">青花瓷</span> · 西瓜JUN &amp; SWS Junzi</p>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
